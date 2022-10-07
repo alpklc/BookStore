@@ -32,23 +32,33 @@ public class BooksController : ControllerBase
     };
 
     [HttpGet]
-    public List<Book> GetBooks()
+    public ActionResult GetBooks()
     {
         var bookList = BookList.OrderBy(b => b.Id).ToList();
-        return bookList;
+        return Ok(bookList);
     }
 
     [HttpGet("{id}")]
-    public Book GetById(int id)
+    public IActionResult GetById(int id)
     {
         var book = BookList.Single(b => b.Id == id);
-        return book;
+        return Ok(book);
     }
 
     [HttpGet]
-    public Book Get(int id)
+    public IActionResult Get([FromQuery] int id)
     {
         var book = BookList.Single(b => b.Id == id);
-        return book;
+        return Ok(book);
+    }
+
+    [HttpPost]
+    public IActionResult AddBook([FromBody] Book newBook)
+    {
+        var book = BookList.SingleOrDefault(b => b.Title == newBook.Title);
+        if (book is not null)
+            return BadRequest();
+        BookList.Add(newBook);
+        return Ok();
     }
 }
