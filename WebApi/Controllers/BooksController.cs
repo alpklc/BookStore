@@ -75,4 +75,16 @@ public class BooksController : ControllerBase
 
         return Ok();
     }
+
+    
+    [HttpDelete("{id}")]
+    public IActionResult DeleteBook(int id)
+    {
+        var book = BookList.SingleOrDefault(b => b.Id == id);
+        if (book is null)
+            return BadRequest();
+        BookList.Remove(book);
+
+        return Ok();
+    }
 }
