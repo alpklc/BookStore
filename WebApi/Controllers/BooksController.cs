@@ -61,4 +61,18 @@ public class BooksController : ControllerBase
         BookList.Add(newBook);
         return Ok();
     }
+
+    [HttpPut]
+    public IActionResult UpdateBook([FromBody] Book updatedBook)
+    {
+        var book = BookList.SingleOrDefault(b => b.Id == updatedBook.Id);
+        if (book is null)
+            return BadRequest();
+        book.GenreId = updatedBook.GenreId != default ? updatedBook.GenreId : book.GenreId;
+        book.PageCount = updatedBook.PageCount != default ? updatedBook.PageCount : book.PageCount;
+        book.PublishDate = updatedBook.PublishDate != default ? updatedBook.PublishDate : book.PublishDate;
+        book.Title = updatedBook.Title != default ? updatedBook.Title : book.Title;
+
+        return Ok();
+    }
 }
